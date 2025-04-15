@@ -15,7 +15,7 @@ import authConfig from "./auth.config";
 function getLocale(request: NextRequest): string | undefined {
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
-  const locales: string[] = i18n.locales;
+  const locales: string[] = [...i18n.locales];
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(locales);
   return matchLocale(languages, locales, i18n.defaultLocale);
 }
