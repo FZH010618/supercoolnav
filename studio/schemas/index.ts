@@ -1,5 +1,5 @@
-import group from './group'
-import listing from './listing'
+import { eventType } from "./eventType";
 
-export const schemaTypes = [group, listing]
- 
+export const schemaTypes = [
+  eventType
+];
