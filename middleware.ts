@@ -1,3 +1,16 @@
+export default middleware((request: NextRequest & { auth: Session | null }): Response | void => {
+  const pathname = request.nextUrl.pathname;
+
+  // ✅ 解决关键点：让 Sanity Studio 的后台页面不被中间件重定向
+  if (pathname.startsWith("/studio")) {
+    console.log("middleware, skip for /studio");
+    return NextResponse.next();
+  }
+
+  // ...剩下你的逻辑不变
+});
+
+
 import {
   apiAuthPrefix,
   publicRoutes,
