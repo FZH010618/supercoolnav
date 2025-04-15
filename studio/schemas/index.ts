@@ -1,5 +1,5 @@
-import { eventType } from "./eventType";
+import { event } from './event';
 
 export const schemaTypes = [
-  eventType
+  event
 ];
