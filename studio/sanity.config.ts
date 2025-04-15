@@ -1,14 +1,13 @@
-// studio/sanity.config.ts
-import { defineConfig } from 'sanity';
-import { deskTool } from 'sanity/desk';
-import { visionTool } from '@sanity/vision';
-import { schemaTypes } from './schemaTypes'; // 👈 注意引入这个
+import { defineConfig } from 'sanity'
+import { deskTool } from 'sanity/desk'
+import { visionTool } from '@sanity/vision'
+import { schemaTypes } from './schemas' // ← 修正路径
 
 export default defineConfig({
   name: 'default',
   title: 'CMS',
 
-  projectId: 'your_project_id',
+  projectId: 'your_project_id', // ← 替换为你的实际 ID
   dataset: 'production',
 
   plugins: [deskTool(), visionTool()],
@@ -16,4 +15,4 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
-});
+})
