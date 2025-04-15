@@ -50,3 +50,10 @@ export const eventType = defineType({
     }),
   ],
 })
+
+// Replace "slug" in the array of fields:
+defineField({
+  name: 'slug',
+  type: 'slug',
+  options: {source: 'name'},
+}),
