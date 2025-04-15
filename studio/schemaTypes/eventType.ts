@@ -57,3 +57,14 @@ defineField({
   type: 'slug',
   options: {source: 'name'},
 }),
+
+
+  // Replace "eventType" in the array of fields:
+defineField({
+  name: 'eventType',
+  type: 'string',
+  options: {
+    list: ['in-person', 'virtual'],
+    layout: 'radio',
+  },
+}),
