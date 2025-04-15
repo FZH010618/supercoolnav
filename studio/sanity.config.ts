@@ -1,16 +1,16 @@
-import { defineConfig } from 'sanity'
-import { deskTool } from 'sanity/desk'
-import { visionTool } from '@sanity/vision'
-import { schemaTypes } from './schemas' // ← 修正路径
+import {defineConfig} from 'sanity'
+import {structureTool} from 'sanity/structure'
+import {visionTool} from '@sanity/vision'
+import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'CMS',
+  title: 'My Directory CMS',
 
-  projectId: 'your_project_id', // ← 替换为你的实际 ID
+  projectId: 'jma45g9e',
   dataset: 'production',
 
-  plugins: [deskTool(), visionTool()],
+  plugins: [structureTool(), visionTool()],
 
   schema: {
     types: schemaTypes,
