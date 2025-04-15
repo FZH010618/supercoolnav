@@ -98,12 +98,15 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
       console.log('middleware, redirectUrl with search:', redirectUrl);
     }
 
-    // e.g. incoming request is /products
-    // The new URL is now /en-US/products
-    return NextResponse.redirect(
-      new URL(redirectUrl, request.url,),
-    );
-  }
+// 只重定向到以 /zh 或 /en 开头的合法路径，避免误导到错误地址
+if (
+  redirectUrl.startsWith("/zh") ||
+  redirectUrl.startsWith("/en") ||
+  redirectUrl.startsWith("/fr") // 你可以添加其他语言前缀
+) {
+  return NextResponse.redirect(new URL(redirectUrl, request.url));
+}
+
 
   // url has locale, continue validating auth
   const { nextUrl } = request;
