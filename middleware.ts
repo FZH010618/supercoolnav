@@ -38,7 +38,7 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
   const pathname = request.nextUrl.pathname;
   console.log('middleware, pathname:', pathname);
 
-  // // /_next/ and /api/ are ignored by the watcher, but we need to ignore files in public manually.
+  // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
   if (
     [
       '/og.png',
@@ -66,7 +66,7 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
       // '/images/avatars/javayhu.png',
       // '/images/avatars/shadcn.png',
 
-      // Your other files in public
+      // Your other files in `public`
     ].includes(pathname)
   ) {
     console.log('middleware, return public file:', pathname);
@@ -81,7 +81,7 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) =>
-      !pathname.startsWith(/${locale}/) && pathname !== /${locale},
+      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
   console.log('middleware, pathnameIsMissingLocale:', pathnameIsMissingLocale);
 
@@ -89,7 +89,7 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
   const locale = getLocale(request);
   console.log('middleware, locale:', locale);
   if (pathnameIsMissingLocale) {
-    let redirectUrl = /${locale}${pathname.startsWith("/") ? "" : "/"}${pathname};
+    let redirectUrl = `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`;
     console.log('middleware, redirectUrl:', redirectUrl);
 
     // append search params from the incoming request to the redirect url
@@ -98,10 +98,12 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
       console.log('middleware, redirectUrl with search:', redirectUrl);
     }
 
-return NextResponse.redirect(
-  new URL(redirectUrl, request.url),
-);
-
+    // e.g. incoming request is /products
+    // The new URL is now /en-US/products
+    return NextResponse.redirect(
+      new URL(redirectUrl, request.url,),
+    );
+  }
 
   // url has locale, continue validating auth
   const { nextUrl } = request;
@@ -113,7 +115,7 @@ return NextResponse.redirect(
   let nextUrlPathname = nextUrl.pathname;  
   i18n.locales.map((locale) => {
     nextUrlPathname = nextUrlPathname.replace(
-      new RegExp(^/${locale}),
+      new RegExp(`^/${locale}`),
       "",
     );
   });
@@ -129,7 +131,7 @@ return NextResponse.redirect(
   if (/* env.MODE === "development" &&  */isRestrictedRoute) {
     console.log('middleware, redirect to index');
     return Response.redirect(
-      new URL(/${locale}, nextUrl),
+      new URL(`/${locale}`, nextUrl),
     );
   }
 
@@ -158,7 +160,7 @@ return NextResponse.redirect(
   //   if (isLoggedIn) {
   //     // use DEFAULT_REDIRECT_HOME_URL and nextUrl to create the redirect URL
   //     console.log('middleware, isAuthRoute & loggedIn, return dashboard');
-  //     return Response.redirect(new URL(/${locale}${DEFAULT_REDIRECT_HOME_URL}, nextUrl));
+  //     return Response.redirect(new URL(`/${locale}${DEFAULT_REDIRECT_HOME_URL}`, nextUrl));
   //   }
   //   return;
   // }
@@ -173,12 +175,12 @@ return NextResponse.redirect(
     // if we have login page, redirect to it, but now we disabled it
     // const encodedCallbackUrl = encodeURICompo  nent(callbackUrl);
     // return Response.redirect(
-    //   new URL(/login?callbackUrl=${encodedCallbackUrl}, nextUrl),
+    //   new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
     // );
 
-    console.log('middleware, redirect to index:', /${locale});
+    console.log('middleware, redirect to index:', `/${locale}`);
     return Response.redirect(
-      new URL(/${locale}, nextUrl),
+      new URL(`/${locale}`, nextUrl),
     );
   }
 
@@ -192,7 +194,7 @@ return NextResponse.redirect(
 // meaning that every request has to go through the middleware checks. 
 // You can however define only private routes here, but the former gives you more control and is strongly advisable.
 export const config = {
-  // Matcher ignoring /_next/ and /api/
+  // Matcher ignoring `/_next/` and `/api/`
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)", "/"],
   // matcher: ["/((?!.+\\.[\\w]+$|_next|api).*)", "/"],
 };
